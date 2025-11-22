@@ -348,3 +348,16 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+## Team
+
+The project was initiated to participate in a Neo x DeFrens event (SpoonOS Hackathon + Demo Day).
+
+We are the team Snoop-Soup consisting of the following members:
+
+* Ekaterina Melnikova
+* Artem Arakcheev
+
+We look for a front-end contributor.
+
+Thanks!
