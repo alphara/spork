@@ -25,6 +25,12 @@ This project explores how AI can generate functional agent code by understanding
 
 ---
 
+## Spork Video Intro
+
+[![Spork for SpoonOS by Artem Arakcheev](https://img.youtube.com/vi/j8XBc6Y5auk/0.jpg)](https://youtu.be/j8XBc6Y5auk)
+
+---
+
 ## 🌍 Why This Project Exists
 
 Modern AI platforms rely on agents that interact with tools, data, APIs, and networks.
