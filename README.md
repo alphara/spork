@@ -1,6 +1,184 @@
 # Spork
 
+```
+███████╗██████╗  ██████╗ ██████╗ ██╗  ██╗
+██╔════╝██╔══██╗██╔═══██╗██╔══██╗██║ ██╔╝
+███████╗██████╔╝██║   ██║██████╔╝█████╔╝ 
+╚════██║██╔═══╝ ██║   ██║██╔══██╗██╔═██╗ 
+███████║██║     ╚██████╔╝██║  ██║██║  ██╗
+╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+```
+
 Meet Spork, the world’s first utensil-inspired meta-agent. Forged in the digital kitchens of SpoonOS, Spork is a hybrid wonder: part spoon, part fork, and 100% dedicated to creating agents that are smarter, faster, and occasionally confused about why a piece of cutlery is in charge.
+
+![Sporkitect](./sporkitect.png)
+
+## 🥄 Sporkitecht — The Agent-Architect for SpoonOS
+
+**Spork** is a project that implements **Sporkitecht**, an autonomous agent-architect designed for **SpoonOS**, an agentic AI operating system.
+
+Its purpose is simple but ambitious:
+
+> **Sporkitecht creates other agents. Automatically. Reliably. From a short prompt.**
+
+This project explores how AI can generate functional agent code by understanding the full agent-architecture defined in SpoonOS and applying it to user-defined specifications.
+
+---
+
+## 🌍 Why This Project Exists
+
+Modern AI platforms rely on agents that interact with tools, data, APIs, and networks.
+But **designing and coding these agents is still a manual, error-prone process.**
+
+Developers must:
+
+* Understand a specific agent framework
+* Scan fragmented documentation
+* Wire up tools and I/O
+* Follow strict architectural patterns
+* Ensure outputs follow exact format requirements
+
+This becomes even harder when the ecosystem (like SpoonOS) grows—multiple agent types, dozens of tools, special prompts, graph workflows, memory modules, etc.
+
+**Sporkitecht solves this by turning agent creation into a natural-language request.**
+You describe the agent.
+Sporkitecht writes the code.
+
+---
+
+## 🚀 What Problems It Solves
+
+### 1. **Agent Development Is Slow**
+
+Normally, building a correct agent requires reading multiple documents, examples, and conventions.
+
+Sporkitecht **automates this entirely**, generating ready-to-run code in seconds.
+
+---
+
+### 2. **Architecture Consistency**
+
+Human-written agents often drift from official architecture guidelines.
+
+Sporkitecht uses **the actual SpoonOS Agent Creation Guide**, loaded dynamically from local files, ensuring:
+
+* Correct structure
+* Correct use of ToolCallAgent
+* Correct tool definitions
+* Proper system prompts
+* Uniform coding style
+
+It becomes a *living compiler* for the SpoonOS agent ecosystem.
+
+---
+
+### 3. **Integrating Tools Is Hard**
+
+Agents usually need access to custom tools.
+
+This project demonstrates:
+
+* How to define a custom tool (`GreetingTool`)
+* How to inject it into an agent via `ToolManager`
+* How to make it available for LLM tool-calling
+
+Sporkitecht can then use the tool automatically when generating agent code.
+
+---
+
+### 4. **Developers Often Forget Critical Context**
+
+Sporkitecht loads:
+
+```
+spoon-core/doc/agent.md
+spoon-core/doc/builtin_tools.md
+spoon-core/doc/graph_agent.md
+spoon-core/examples/...
+```
+
+It merges them into a unified **Agent Creation Guide** the LLM always sees.
+This ensures the agent:
+
+* Has full documentation during generation
+* Generates code consistent with the entire ecosystem
+* Learns from real examples, not theory
+
+---
+
+### 5. **Cross-Provider LLM Flexibility Is Usually Painful**
+
+Because it wraps everything inside a simple configuration (`ChatBot`), the system can switch:
+
+* OpenAI (default)
+* Anthropic
+* Gemini
+* DeepSeek
+* OpenRouter
+
+…all with the same agent code.
+
+---
+
+## 🧠 How It Works
+
+### **1. Loads the entire SpoonOS agent manual**
+
+It reads documentation and example scripts from `spoon-core/`, joins them into a single text, and injects it into the system prompt.
+
+### **2. Defines a meta-agent: Sporkitecht**
+
+Sporkitecht is not an operational agent itself—
+it is an **agent-creator**.
+
+Its system prompt clearly states:
+
+* “Your name is Spork.”
+* “You develop agents.”
+* “You output only Python code.”
+* “Follow the Agent Creation Guide.”
+
+This makes it deterministic and architecture-aligned.
+
+### **3. Accepts a natural-language prompt**
+
+Example:
+
+```
+Generate me a web3 agent that helps with finance customer support
+```
+
+No conventions, no boilerplate — just description.
+
+### **4. Generates full Python agent code**
+
+The output is:
+
+* Syntactically correct
+* Conforms to SpoonOS architecture
+* Ready to run or embed
+* Automatically uses tools when appropriate
+
+### **5. Runs entirely from command-line**
+
+Using `--prompt "..."`, developers can create agents from scripts, automation pipelines, CI/CD, or other agent builders.
+
+---
+
+## 🔮 Vision
+
+Sporkitecht aims to become **the compiler, architect, and mentor** of a fully agentic AI operating system.
+
+Instead of manually designing dozens of agents, developers will describe behavior at a high level—and Sporkitecht will consistently generate correct implementations.
+
+This project demonstrates:
+
+* How agent-architect agents work
+* How SpoonOS agent generation is automated
+* How to create meta-agents that shape other agents
+* How to integrate documentation-aware LLM workflows
+
+---
 
 ## Prerequisites
 
@@ -28,18 +206,10 @@ cd ../
 pip install -r requirements.txt
 
 cp env.example .env
-# Set your keys:
-#
-# OPENAI_API_KEY
-
-# FIXME: No need:
-#
-## GEMINI_API_KEY
-## TELEGRAM_BOT_TOKEN
-## TELEGRAM_CHAT_ID
+# Set your keys in the .env:
+# * OPENAI_API_KEY
 
 # verify configuration
-
 python -c "from spoon_ai.utils.config_manager import ConfigManager; print('✅ Configuration loaded successfully')"
 ```
 
