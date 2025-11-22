@@ -1,0 +1,3 @@
+[submodule "spoon-core"]
+	path = spoon-core
+	url = https://github.com/XSpoonAi/spoon-core
