@@ -366,6 +366,7 @@ We are the team Snoop-Soup consisting of the following members:
 
 * Ekaterina Melnikova
 * Artem Arakcheev
+* Pavel Gembarzhevsky
 
 We look for a front-end contributor.
 
