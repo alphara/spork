@@ -353,6 +353,8 @@ if __name__ == "__main__":
 
 You can run web app with the chat window.
 
+![web UI](./webui.png)
+
 ```bash
 python soup.py
 # Web server running on http://localhost:8183
