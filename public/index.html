@@ -1,64 +1,75 @@
 <!DOCTYPE html>
-<!-- llm чат -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> ЛЛМ чатбот| помощник </title>
-    <!-- подключить Google fonts для иконок -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <title>ЛЛМ чатбот | помощник</title>
+
+    <!-- Google Material Icons -->
+    <link 
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+    />
+
     <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!--  чатбот переключатель -->
-  <button id="chatbot-toggler">
-    <span class="material-symbols-rounded">mode_comment</span>
-    <span class="material-symbols-rounded">close</span>
-  </button>
+  </head>
+  <body>
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggler">
+      <span class="material-symbols-rounded">mode_comment</span>
+      <span class="material-symbols-rounded">close</span>
+    </button>
 
-  <div class="chatbot-popup">
-    <!-- чатбот хедер -->
-    <div class="chat-header">
-      <div class="header-info">
-        <img class="chatbot-logo" src="logo.png" alt="Chatbot Logo" width="50" height="50">
-        </img>
-        <h2 class="logo-text">Чатбот</h2>
-      </div>
-      <button id="close-chatbot" class="material-symbols-rounded">keyboard_arrow_down</button>
-    </div>
-
-    <!-- чатбот боди -->
-    <div class="chat-body">
-      <div class="message bot-message">
-        <img class="bot-avatar" src="logo.png" alt="Chatbot Logo" width="50" height="50">
-        </img>
-        <!-- prettier-ignore -->
-        <div class="message-text"> Здравствуйте  <br /> Чем я могу вам помочь? </div>
-      </div>
-    </div>
-
-    <!-- чатбот футер -->
-    <div class="chat-footer">
-      <form action="#" class="chat-form">
-        <textarea placeholder="сообщение..." class="message-input" required></textarea>
-        <div class="chat-controls">
-          <button type="button" id="emoji-picker" class="material-symbols-outlined">sentiment_satisfied</button>
-          <div class="file-upload-wrapper">
-            <input type="file" accept="image/*" id="file-input" hidden />
-            <img src="#" />
-            <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
-            <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
-          </div>
-          <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
+    <div class="chatbot-popup">
+      <!-- Chatbot Header -->
+      <div class="chat-header">
+        <div class="header-info">
+          <img class="chatbot-logo" src="logo.png" alt="Chatbot Logo" width="50" height="50" />
+          <h2 class="logo-text">Чатбот</h2>
         </div>
-      </form>
+        <button id="close-chatbot" class="material-symbols-rounded">keyboard_arrow_down</button>
+      </div>
+
+      <!-- Chat Body -->
+      <div class="chat-body">
+        <div class="message bot-message">
+          <img class="bot-avatar" src="logo.png" alt="Chatbot Logo" width="50" height="50" />
+          <div class="message-text">
+            Здравствуйте <br />
+            Чем я могу вам помочь?
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Footer -->
+      <div class="chat-footer">
+        <form action="#" class="chat-form">
+          <textarea placeholder="сообщение..." class="message-input" required></textarea>
+
+          <div class="chat-controls">
+            <button type="button" id="emoji-picker" class="material-symbols-outlined">
+              sentiment_satisfied
+            </button>
+
+            <div class="file-upload-wrapper">
+              <input type="file" accept="image/*" id="file-input" hidden />
+              <img src="#" />
+              <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
+              <button type="button" id="file-cancel" class="material-symbols-rounded">close</button>
+            </div>
+
+            <button type="submit" id="send-message" class="material-symbols-rounded">
+              arrow_upward
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- подключить Emoji Mart скрипт для emoji пикера -->
-  <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+    <!-- Emoji picker -->
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
 
-  <!-- подключить дополнительные скрипты -->
-  <script src="script.js"></script>
-</body>
+    <!-- Main JS -->
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -349,6 +349,15 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+## Web App
+
+You can run web app with the chat window.
+
+```bash
+python soup.py
+# Web server running on http://localhost:8183
+```
+
 ## Team
 
 The project was initiated to participate in a Neo x DeFrens event (SpoonOS Hackathon + Demo Day).

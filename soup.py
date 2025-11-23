@@ -144,8 +144,8 @@ async def start_web_server():
     runner = web.AppRunner(app)
     await runner.setup()
 
-    site = web.TCPSite(runner, "0.0.0.0", 8182)
-    print("Web server running on http://localhost:8182")
+    site = web.TCPSite(runner, "0.0.0.0", 8183)
+    print("Web server running on http://localhost:8183")
     await site.start()
 
     # Keep it running forever

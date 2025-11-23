@@ -7,9 +7,9 @@ const fileCancelButton = fileUploadWrapper.querySelector("#file-cancel");
 const chatbotToggler = document.querySelector("#chatbot-toggler");
 const closeChatbot = document.querySelector("#close-chatbot");
 
-// настройка API 
-const API_KEY = "AIzaSyCQXdM8mF1o7j7KlC2ue75X37ZIU_cDTVk";
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${API_KEY}`;
+// Our backend API
+// const API_URL = "http://localhost:8080/api";
+const API_URL = "http://localhost:8183/api";
 
 // Инициализация пользовательских сообщений и данных файлов
 const userData = {
@@ -32,54 +32,52 @@ const createMessageElement = (content, ...classes) => {
   return div;
 };
 
-// Сгенерировать ответ бота с помощью API
+// =============================
+// Generate bot response via our server
+// =============================
 const generateBotResponse = async (incomingMessageDiv) => {
   const messageElement = incomingMessageDiv.querySelector(".message-text");
 
-  // Добавить сообщение пользователя в историю чата
-  chatHistory.push({
-    role: "user",
-    parts: [{ text: userData.message }, ...(userData.file.data ? [{ inline_data: userData.file }] : [])],
-  });
+  const finalPrompt = userData.message;
 
-  // Параметры запроса API
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: chatHistory,
-    }),
+    body: JSON.stringify({ prompt: finalPrompt }),
   };
 
   try {
-    // Получение ответа бота из API
     const response = await fetch(API_URL, requestOptions);
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error.message);
 
-    // Получить и отобразить текст ответа бота
-    const apiResponseText = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, "$1").trim();
+    if (!response.ok) {
+      throw new Error(data.error || "Server error");
+    }
+
+    // Our backend returns: { response: "..." }
+    const apiResponseText = (data.response || "").trim();
+
     messageElement.innerText = apiResponseText;
 
-    // Добавить сообщение бота в историю чата
+    // Add to chat history
     chatHistory.push({
       role: "model",
       parts: [{ text: apiResponseText }],
     });
   } catch (error) {
-    // Обработать ошибку в ответе API
-    console.log(error);
+    console.error(error);
     messageElement.innerText = error.message;
     messageElement.style.color = "#ff0000";
   } finally {
-    // Сбросить данные файла пользователя, убрав индикатор мышления и прокрутив чат вниз
     userData.file = {};
     incomingMessageDiv.classList.remove("thinking");
     chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
   }
 };
 
-// Обработать исходящее сообщение пользователя
+// =============================
+// Handle outgoing messages
+// =============================
 const handleOutgoingMessage = (e) => {
   e.preventDefault();
   userData.message = messageInput.value.trim();
@@ -87,42 +85,53 @@ const handleOutgoingMessage = (e) => {
   messageInput.dispatchEvent(new Event("input"));
   fileUploadWrapper.classList.remove("file-uploaded");
 
-  // Создать и показать сообщение пользователя
-  const messageContent = `<div class="message-text"></div>
-                          ${userData.file.data ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}`;
+  if (!userData.message) return;
+
+  const messageContent = `
+    <div class="message-text"></div>
+    ${userData.file.data ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="attachment" />` : ""}
+  `;
 
   const outgoingMessageDiv = createMessageElement(messageContent, "user-message");
   outgoingMessageDiv.querySelector(".message-text").innerText = userData.message;
   chatBody.appendChild(outgoingMessageDiv);
   chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
 
-  // Имитировать реакцию бота с помощью индикатора мышления после задержки
+  // Show bot thinking bubble
   setTimeout(() => {
-    const messageContent = `<img class="bot-avatar" src="logo.png" alt="Chatbot Logo" width="50" height="50">
-          </img>
-          <div class="message-text">
-            <div class="thinking-indicator">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </div>
-          </div>`;
+    const messageContent = `
+      <img class="bot-avatar" src="logo.png" alt="Chatbot Logo" width="50" height="50">
+      <div class="message-text">
+        <div class="thinking-indicator">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    `;
 
     const incomingMessageDiv = createMessageElement(messageContent, "bot-message", "thinking");
     chatBody.appendChild(incomingMessageDiv);
     chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
+
     generateBotResponse(incomingMessageDiv);
   }, 600);
 };
 
-// Динамическая регулировка высоты инпута
+// =============================
+// Input height auto-adjust
+// =============================
 messageInput.addEventListener("input", () => {
   messageInput.style.height = `${initialInputHeight}px`;
   messageInput.style.height = `${messageInput.scrollHeight}px`;
-  document.querySelector(".chat-form").style.borderRadius = messageInput.scrollHeight > initialInputHeight ? "15px" : "32px";
+
+  document.querySelector(".chat-form").style.borderRadius =
+    messageInput.scrollHeight > initialInputHeight ? "15px" : "32px";
 });
 
-// Обработать нажатие кнопки Enter для отправки сообщений
+// =============================
+// Enter key to send
+// =============================
 messageInput.addEventListener("keydown", (e) => {
   const userMessage = e.target.value.trim();
   if (e.key === "Enter" && !e.shiftKey && userMessage && window.innerWidth > 768) {
@@ -130,7 +139,9 @@ messageInput.addEventListener("keydown", (e) => {
   }
 });
 
-// Обработать изменение вводимых данных и просмотреть выбранный файл
+// =============================
+// File Upload Handling
+// =============================
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -142,7 +153,6 @@ fileInput.addEventListener("change", () => {
     fileUploadWrapper.classList.add("file-uploaded");
     const base64String = e.target.result.split(",")[1];
 
-    // Сохранить файловые данные в userData
     userData.file = {
       data: base64String,
       mime_type: file.type,
@@ -152,13 +162,15 @@ fileInput.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-// Отменить загрузку файла
+// Cancel file upload
 fileCancelButton.addEventListener("click", () => {
   userData.file = {};
   fileUploadWrapper.classList.remove("file-uploaded");
 });
 
-// Инициализировать эмодзи пикер и бработать выбор эмодзи
+// =============================
+// Emoji Picker
+// =============================
 const picker = new EmojiMart.Picker({
   theme: "light",
   skinTonePosition: "none",
@@ -179,6 +191,9 @@ const picker = new EmojiMart.Picker({
 
 document.querySelector(".chat-form").appendChild(picker);
 
+// =============================
+// Buttons
+// =============================
 sendMessage.addEventListener("click", (e) => handleOutgoingMessage(e));
 document.querySelector("#file-upload").addEventListener("click", () => fileInput.click());
 closeChatbot.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
